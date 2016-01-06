@@ -1,0 +1,86 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container">
+
+    {% if repo1 and repo2 %}
+        <h4>Repository Stats</h4>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>{{ repo1.repo_name }}</th>
+                <th>{{ repo2.repo_name }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">Star Count</th>
+                <td>{{ repo1.stargazers_count }}</td>
+                <td>{{ repo2.stargazers_count }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Watcher Count</th>
+                <td>{{ repo1.watchers_count }}</td>
+                <td>{{ repo2.watchers_count }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Fork Count</th>
+                <td>{{ repo1.forks_count }}</td>
+                <td>{{ repo2.forks_count }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <hr/>
+    {% endif %}
+
+    <h4>Compare GitHub Repositories</h4>
+
+    {% if form.non_field_errors %}
+        <ul>
+            {% for error in form.non_field_errors %}
+                <li><strong>{{ error|escape }}</strong></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form action='' method='post'>
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="{{ form.repo1.auto_id }}">{% trans 'Repository 1' %}</label>
+            <input type="text" class="form-control" id="{{ form.repo1.auto_id }}" name="{{ form.repo1.html_name }}" value="https://github.com/django/django">
+            {% if form.repo1.errors %}
+                {% for error in form.repo1.errors %}
+                    <span class="text-danger"><em>{{ error|escape }}</em></span>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.repo2.auto_id }}">{% trans 'Repository 2' %}</label>
+            <input type="text" class="form-control" id="{{ form.repo2.auto_id }}" name="{{ form.repo2.html_name }}" value="https://github.com/tomchristie/django-rest-framework">
+            {% if form.repo2.errors %}
+                {% for error in form.repo2.errors %}
+                    <span class="text-danger"><em>{{ error|escape }}</em></span>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value='Submit'>
+        </div>
+    </form>
+</div>
+</body>
+</html>
